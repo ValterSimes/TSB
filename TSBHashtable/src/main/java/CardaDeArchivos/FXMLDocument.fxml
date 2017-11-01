@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="263.0" prefWidth="397.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CargaArchivos.FXMLDocumentController">
+   <children>
+      <Button layoutX="37.0" layoutY="34.0" mnemonicParsing="false" onAction="#btnCargarClick" text="Cargar Archivo" />
+      <Label layoutX="37.0" layoutY="75.0" text="Palabra a buscar:" />
+      <TextField fx:id="txtPalabra" layoutX="37.0" layoutY="100.0" />
+      <Label fx:id="lblResultado" layoutX="37.0" layoutY="141.0" />
+      <Label fx:id="lblArchivo" layoutX="202.0" layoutY="26.0" text="Archivo:" />
+      <Button layoutX="37.0" layoutY="195.0" mnemonicParsing="false" onAction="#btnBuscarClick" text="Buscar" />
+      <Button layoutX="132.0" layoutY="195.0" mnemonicParsing="false" onAction="#btnLimpiarClick" text="Limpiar" />
+      <TextArea fx:id="txtArchivo" layoutX="223.0" layoutY="53.0" prefHeight="176.0" prefWidth="149.0" />
+   </children>
+</AnchorPane>

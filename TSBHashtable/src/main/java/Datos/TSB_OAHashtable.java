@@ -45,6 +45,12 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
      * la tabla. Lanzará una IllegalArgumentException si alguno de los dos 
      * parámetros es null.
      */
+    public boolean esTumba(int i)
+        {
+           return (vector[i].getValue()==null);
+        }
+    
+    
     private class Entry<K, V> implements Map.Entry<K, V>
     {
         private K key;
@@ -60,10 +66,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             this.value = value;
         }
         
-        public boolean esTumba(int i)
-        {
-           return (vector[i].getValue()==null);
-        }
+        
         @Override
         public K getKey() 
         {

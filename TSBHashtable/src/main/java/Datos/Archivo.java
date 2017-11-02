@@ -32,7 +32,7 @@ public class Archivo {
         }
         catch(FileNotFoundException e)
         {
-            System.err.print("Error de lectura");
+            System.err.print("Error de lectura ");
                     
         }
     }

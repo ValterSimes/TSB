@@ -176,6 +176,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         }
         vector[i] = new Entry(key, value);
         return value;
+<<<<<<< HEAD
     }
 
 
@@ -188,6 +189,20 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         return h(k, this.vector.length);
     }
 
+=======
+    }
+
+
+    /*
+     * Función hash. Toma una clave entera k y calcula y retorna un índice
+     * válido para esa clave para entrar en la tabla.
+     */
+    private int h(int k)
+    {
+        return h(k, this.vector.length);
+    }
+
+>>>>>>> 6fd65f56d01913a9763ce33776e9f47797ff4b4a
     /*
      * Función hash. Toma un objeto key que representa una clave y calcula y
      * retorna un índice válido para esa clave para entrar en la tabla.

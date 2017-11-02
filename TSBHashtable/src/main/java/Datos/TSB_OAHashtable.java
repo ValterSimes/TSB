@@ -163,7 +163,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 i++;
             }
         }
-        vector[i] = new Entry(key, value);
+        vector[i] = new Entry<>(key, value);
         return value;
     }
 

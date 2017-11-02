@@ -91,29 +91,7 @@ public class TSBHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     //Esta es la clase Entry que se tiene que implemente la interface Map.Entry para representar a cada par que se almacene en la tabla.(segun el enunciado) by Lupox
     
-    public class Entry implements Map.Entry
-    {
 
-        @Override
-        public Object getKey() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Object getValue() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Object setValue(Object value) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        
-        /**
-     * Crea una tabla vacía, con la capacidad inicial igual a 11 y con factor 
-     * de carga igual a 0.8f. 
-     */    
-    }
     public TSBHashtable()
     {
         this(5, 0.8f);

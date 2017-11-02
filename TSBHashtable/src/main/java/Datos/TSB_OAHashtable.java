@@ -35,6 +35,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         if(initial_capacity <= 0) { initial_capacity = 11; }
 
         this.vector = new Entry[initial_capacity];
+        count = 0;
     }
 
             /*
@@ -138,10 +139,68 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
 
     @Override
-    public V put(K key, V value) {
-        
-        return null;
+    public V put(K key, V value)
+    {
+        if(key == null || value == null) throw new NullPointerException("put(): parámetro null");
+
+        int i = this.h(key);
+
+        while (esTumba(i) || vector[i] == null)
+        {
+            if ((i + 1) == vector.length)
+            {
+                i = 0;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        vector[i] = new Entry(key, value);
+        return value;
     }
+
+
+    /*
+     * Función hash. Toma una clave entera k y calcula y retorna un índice
+     * válido para esa clave para entrar en la tabla.
+     */
+    private int h(int k)
+    {
+        return h(k, this.vector.length);
+    }
+
+    /*
+     * Función hash. Toma un objeto key que representa una clave y calcula y
+     * retorna un índice válido para esa clave para entrar en la tabla.
+     */
+    private int h(K key)
+    {
+        return h(key.hashCode(), this.vector.length);
+    }
+
+    /*
+     * Función hash. Toma un objeto key que representa una clave y un tamaño de
+     * tabla t, y calcula y retorna un índice válido para esa clave dedo ese
+     * tamaño.
+     */
+    private int h(K key, int t)
+    {
+        return h(key.hashCode(), t);
+    }
+
+    /*
+     * Función hash. Toma una clave entera k y un tamaño de tabla t, y calcula y
+     * retorna un índice válido para esa clave dado ese tamaño.
+     */
+    private int h(int k, int t)
+    {
+        if(k < 0) k *= -1;
+        return k % t;
+    }
+
+
+
 
     @Override
     public V remove(Object key) {

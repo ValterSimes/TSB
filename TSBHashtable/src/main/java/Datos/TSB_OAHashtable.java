@@ -15,6 +15,7 @@ import java.util.Set;
 public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 {
 
+    private int count;
     private Entry<K,V> vector[];
 
     public TSB_OAHashtable()
@@ -99,12 +100,12 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
     @Override
     public int size() {
-        return 0;
+        return this.count;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return (this.count == 0);
     }
 
     @Override
@@ -130,6 +131,10 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     @Override
     public V remove(Object key) {
+        for (int i = 0; i < vector.length; i++)
+        {
+            vector[i].key==key;
+        }
         return null;
     }
 
@@ -140,6 +145,9 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     @Override
     public void clear() {
+        int cant= vector.length;
+        this.vector = new Entry[cant];
+        
 
     }
 

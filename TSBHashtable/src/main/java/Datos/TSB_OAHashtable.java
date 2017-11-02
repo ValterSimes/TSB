@@ -15,9 +15,11 @@ import java.util.Set;
 public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 {
 
-    public TSB_OAHashtable
+    private Entry<K,V> vector[];
+
+    public TSB_OAHashtable()
             {
-    
+                
             }
 
             /*

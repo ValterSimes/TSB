@@ -238,12 +238,17 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
 
     @Override
-    public V remove(Object key) {
-        for (int i = 0; i < vector.length; i++)
-        {
-            vector[i].key==key;
-        }
+    public V remove(Object key) 
+    {
+        int indice = buscar(key);
+        
+         if (-1==indice)
         return null;
+         
+        V v=vector[indice].getValue();
+       
+        vector[indice].setValue(null);
+        return v;
     }
 
     @Override

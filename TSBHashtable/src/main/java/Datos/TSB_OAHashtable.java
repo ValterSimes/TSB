@@ -60,6 +60,10 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             this.value = value;
         }
         
+        public boolean esTumba(int i)
+        {
+           return (vector[i].getValue()==null);
+        }
         @Override
         public K getKey() 
         {

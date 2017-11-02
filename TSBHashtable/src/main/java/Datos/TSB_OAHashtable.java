@@ -134,7 +134,18 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     @Override
     public V get(Object key) {
-        return null;
+      if(key == null) throw new NullPointerException("get(): parámetro null");       
+       int i = this.h(key.hashCode());        
+       while(vector[i]!=null)
+       {
+           if(vector[i].key==key)
+           {
+                return vector[i].getValue();
+           }else{
+               i++;
+           }
+       }       
+       return null;
     }
 
     @Override

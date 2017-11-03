@@ -132,11 +132,18 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        return(buscar(key) != -1);
     }
 
     @Override
     public boolean containsValue(Object value) {
+        for (int i = 0; i < vector.length; i++)
+        {
+            if (vector[i].getValue().equals(value))
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -253,17 +260,25 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
 
     @Override
-    public V remove(Object key) {
-        for (int i = 0; i < vector.length; i++)
-        {
-            vector[i].key==key;
-        }
+    public V remove(Object key) 
+    {
+        int indice = buscar(key);
+        
+         if (-1==indice)
         return null;
+         
+        V v=vector[indice].getValue();
+       
+        vector[indice].setValue(null);
+        return v;
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-
+        for(Map.Entry<? extends K, ? extends V> e : m.entrySet())
+        {
+            put(e.getKey(), e.getValue());
+        }
     }
 
     @Override
@@ -285,7 +300,8 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         return null;
     }
+
 }

@@ -151,6 +151,21 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         else return null;
 
     }
+    protected void rehash()
+    {
+        int tamaño = this.vector.length;
+        int nuevoTamaño= tamaño * 2 + 1;
+        
+        Entry<K,V> vectorDos[] = new Entry[nuevoTamaño];
+        
+        for (int i = 0; i < vectorDos.length; i++) {
+            if(vector[i]!= null)
+            {
+            Map.Entry<K, V> x = it.next();
+            }            
+        }
+        
+    }
 
     private int buscar(Object key)
     {

@@ -29,9 +29,9 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         this(initial_capacity, 0.8f);
     }
 
-    public TSB_OAHashtable(int initial_capacity, float load_factor)
+    public TSB_OAHashtable(int initial_capacity, float loadFactor)
     {
-        if(load_factor <= 0) { load_factor = 0.8f; }
+        if(loadFactor <= 0) { loadFactor = 0.8f; }
         if(initial_capacity <= 0) { initial_capacity = 11; }
 
         this.vector = new Entry[initial_capacity];
@@ -174,7 +174,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     private int buscar(Object key)
     {
       if(key == null) throw new NullPointerException("get(): parámetro null");       
-       int i = this.h(key.hashCode());       
+       int i = this.h(key.hashCode());    
        while(vector[i]!=null)
        {
            if(vector[i].key.equals(key))
@@ -183,10 +183,13 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
            }
            else
            {
+               if(i!=(vector.length-1))
                i++;
+               else 
+               i=0;
            }
        }       
-       return -1;
+       return -1;//significa que no lo encontro.Y manda -1 como valor.
     }
 
 
@@ -210,6 +213,11 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             }
         }
         vector[i] = new Entry<>(key, value);
+
+        if (count >= vector.length*loadFactor)
+        {
+            rehash();
+        }
         return value;
     }
 
@@ -260,8 +268,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     public V remove(Object key) 
     {
         int indice = buscar(key);
-        
-         if (-1==indice)
+        if (-1==indice)
         return null;
          
         V v=vector[indice].getValue();
@@ -288,6 +295,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     @Override
     public Set<K> keySet() {
+
         return null;
     }
 

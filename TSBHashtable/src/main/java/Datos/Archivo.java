@@ -8,8 +8,7 @@ import java.util.Scanner;
 public class Archivo {
 
     private File file;
-    private TSBArrayList<String> lista;
-    
+    private TSBArrayList<String> lista; 
     public Archivo()
     {
         lista = new TSBArrayList<String>();

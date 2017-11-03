@@ -160,18 +160,15 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
     protected void rehash()
     {
-        int tamaño = this.vector.length;
-        int nuevoTamaño= tamaño * 2 + 1;
-        
-        Entry<K,V> vectorDos[] = new Entry[nuevoTamaño];
-        
-        for (int i = 0; i < vectorDos.length; i++) {
-            if(vector[i]!= null)
+        Entry<K,V> vectorDos[] = new Entry[this.vector.length];//crea auxiliar
+        System.arraycopy(this.vector, 0, vectorDos, 0, this.vector.length);//copia vector en auxiliar
+        this.vector= new Entry[this.vector.length*2+1];//nuevo vector (borra lo que tenia)
+        for (int i = 0; i < vector.length; i++) { //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
+            if(!(vectorDos[i]== null || vectorDos[i].getValue()==null))
             {
-            Map.Entry<K, V> x = it.next();
+             this.put(vectorDos[i].getKey(),vectorDos[i].getValue());
             }            
-        }
-        
+        }        
     }
 
     private int buscar(Object key)
@@ -201,7 +198,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
         int i = this.h(key);
 
-        while (esTumba(i) || vector[i] == null)
+        while (!(esTumba(i) || vector[i] == null))
         {
             if ((i + 1) == vector.length)
             {

@@ -285,7 +285,8 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         return null;
     }
+
 }

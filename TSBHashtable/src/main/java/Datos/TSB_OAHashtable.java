@@ -29,9 +29,9 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         this(initial_capacity, 0.8f);
     }
 
-    public TSB_OAHashtable(int initial_capacity, float load_factor)
+    public TSB_OAHashtable(int initial_capacity, float loadFactor)
     {
-        if(load_factor <= 0) { load_factor = 0.8f; }
+        if(loadFactor <= 0) { loadFactor = 0.8f; }
         if(initial_capacity <= 0) { initial_capacity = 11; }
 
         this.vector = new Entry[initial_capacity];
@@ -201,6 +201,11 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             }
         }
         vector[i] = new Entry<>(key, value);
+
+        if (count >= vector.length*loadFactor)
+        {
+            rehash();
+        }
         return value;
     }
 

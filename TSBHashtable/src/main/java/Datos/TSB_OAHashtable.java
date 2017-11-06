@@ -19,6 +19,11 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     private Entry<K,V> vector[];
     private float loadFactor;
 
+    private transient Set<K> keySet = null;
+    private transient Set<Map.Entry<K,V>> entrySet = null;
+    private transient Collection<V> values = null;
+
+
     public TSB_OAHashtable()
     {
         this(5, 0.8f);
@@ -36,6 +41,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
         this.vector = new Entry[initial_capacity];
         count = 0;
+        this.loadFactor = loadFactor;
     }
 
             /*
@@ -296,17 +302,282 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     @Override
     public Set<K> keySet() {
 
-        return null;
+        if(keySet == null)
+        {
+            // keySet = Collections.synchronizedSet(new KeySet());
+            keySet = new KeySet();
+        }
+        return keySet;
     }
 
     @Override
     public Collection<V> values() {
-        return null;
+        if(values==null)
+        {
+            values = new ValueCollection();
+        }
+        return values;
+    }
+
+    /*
+     * Clase interna que representa una vista de todos los VALORES mapeados en
+     * la tabla: si la vista cambia, cambia también la tabla que le da respaldo,
+     * y viceversa. La vista es stateless: no mantiene estado alguno (es decir,
+     * no contiene datos ella misma, sino que accede y gestiona directamente los
+     * de otra fuente), por lo que no tiene atributos y sus métodos gestionan en
+     * forma directa el contenido de la tabla. Están soportados los metodos para
+     * eliminar un objeto (remove()), eliminar todo el contenido (clear) y la
+     * creación de un Iterator (que incluye el método Iterator.remove()).
+     */
+    private class ValueCollection extends AbstractCollection<V>
+    {
+        @Override
+        public Iterator<V> iterator()
+        {
+            return new ValueCollectionIterator();
+        }
+
+        @Override
+        public int size()
+        {
+            return TSB_OAHashtable.this.count;
+        }
+
+        @Override
+        public boolean contains(Object o)
+        {
+            return TSB_OAHashtable.this.containsValue(o);
+        }
+
+        @Override
+        public void clear()
+        {
+            TSB_OAHashtable.this.clear();
+        }
+
+        private class ValueCollectionIterator implements Iterator<V>
+        {
+
+            public ValueCollectionIterator()
+            {
+            }
+
+            /*
+             * Determina si hay al menos un elemento en la tabla que no haya
+             * sido retornado por next().
+             */
+            @Override
+            public boolean hasNext()
+            {
+                return true;
+            }
+
+            /*
+             * Retorna el siguiente elemento disponible en la tabla.
+             */
+            @Override
+            public V next()
+            {
+                return null;
+            }
+
+            /*
+             * Remueve el elemento actual de la tabla, dejando el iterador en la
+             * posición anterior al que fue removido. El elemento removido es el
+             * que fue retornado la última vez que se invocó a next(). El método
+             * sólo puede ser invocado una vez por cada invocación a next().
+             */
+            @Override
+            public void remove()
+            {
+            }
+        }
     }
 
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
-        return null;
+        if(entrySet == null)
+        {
+            entrySet = new EntrySet();
+        }
+        return entrySet;
     }
 
+    /*
+     * Clase interna que representa una vista de todos los PARES mapeados en la
+     * tabla: si la vista cambia, cambia también la tabla que le da respaldo, y
+     * viceversa. La vista es stateless: no mantiene estado alguno (es decir, no
+     * contiene datos ella misma, sino que accede y gestiona directamente datos
+     * de otra fuente), por lo que no tiene atributos y sus métodos gestionan en
+     * forma directa el contenido de la tabla. Están soportados los metodos para
+     * eliminar un objeto (remove()), eliminar todo el contenido (clear) y la
+     * creación de un Iterator (que incluye el método Iterator.remove()).
+     */
+    private class EntrySet extends AbstractSet<Map.Entry<K, V>>
+    {
+
+        @Override
+        public Iterator<Map.Entry<K, V>> iterator()
+        {
+            return new EntrySetIterator();
+        }
+
+        /*
+         * Verifica si esta vista (y por lo tanto la tabla) contiene al par
+         * que entra como parámetro (que debe ser de la clase Entry).
+         */
+        @Override
+        public boolean contains(Object o)
+        {
+            return true;
+        }
+
+        /*
+         * Elimina de esta vista (y por lo tanto de la tabla) al par que entra
+         * como parámetro (y que debe ser de tipo Entry).
+         */
+        @Override
+        public boolean remove(Object o)
+        {
+            return true;
+        }
+
+        @Override
+        public int size()
+        {
+            return TSB_OAHashtable.this.count;
+        }
+
+        @Override
+        public void clear()
+        {
+            TSB_OAHashtable.this.clear();
+        }
+
+        private class EntrySetIterator implements Iterator<Map.Entry<K, V>>
+        {
+
+            /*
+             * Crea un iterador comenzando en la primera lista. Activa el
+             * mecanismo fail-fast.
+             */
+            public EntrySetIterator()
+            {
+            }
+
+            /*
+             * Determina si hay al menos un elemento en la tabla que no haya
+             * sido retornado por next().
+             */
+            @Override
+            public boolean hasNext()
+            {
+                return true;
+            }
+
+            /*
+             * Retorna el siguiente elemento disponible en la tabla.
+             */
+            @Override
+            public Map.Entry<K, V> next()
+            {
+                return null;
+            }
+
+            /*
+             * Remueve el elemento actual de la tabla, dejando el iterador en la
+             * posición anterior al que fue removido. El elemento removido es el
+             * que fue retornado la última vez que se invocó a next(). El método
+             * sólo puede ser invocado una vez por cada invocación a next().
+             */
+            @Override
+            public void remove()
+            {
+            }
+        }
+    }
+
+
+    /*
+     * Clase interna que representa una vista de todas los Claves mapeadas en la
+     * tabla: si la vista cambia, cambia también la tabla que le da respaldo, y
+     * viceversa. La vista es stateless: no mantiene estado alguno (es decir, no
+     * contiene datos ella misma, sino que accede y gestiona directamente datos
+     * de otra fuente), por lo que no tiene atributos y sus métodos gestionan en
+     * forma directa el contenido de la tabla. Están soportados los metodos para
+     * eliminar un objeto (remove()), eliminar todo el contenido (clear) y la
+     * creación de un Iterator (que incluye el método Iterator.remove()).
+     */
+    private class KeySet extends AbstractSet<K>
+    {
+        @Override
+        public Iterator<K> iterator()
+        {
+            return new KeySetIterator();
+        }
+
+        @Override
+        public int size()
+        {
+            return TSB_OAHashtable.this.count;
+        }
+
+        @Override
+        public boolean contains(Object o)
+        {
+            return TSB_OAHashtable.this.containsKey(o);
+        }
+
+        @Override
+        public boolean remove(Object o)
+        {
+            return (TSB_OAHashtable.this.remove(o) != null);
+        }
+
+        @Override
+        public void clear()
+        {
+            TSB_OAHashtable.this.clear();
+        }
+
+        private class KeySetIterator implements Iterator<K>
+        {
+
+            public KeySetIterator()
+            {
+
+            }
+
+            /*
+             * Determina si hay al menos un elemento en la tabla que no haya
+             * sido retornado por next().
+             */
+            @Override
+            public boolean hasNext()
+            {
+                return true;
+            }
+
+            /*
+             * Retorna el siguiente elemento disponible en la tabla.
+             */
+            @Override
+            public K next()
+            {
+               return null;
+            }
+
+            /*
+             * Remueve el elemento actual de la tabla, dejando el iterador en la
+             * posición anterior al que fue removido. El elemento removido es el
+             * que fue retornado la última vez que se invocó a next(). El método
+             * sólo puede ser invocado una vez por cada invocación a next().
+             */
+            @Override
+            public void remove()
+            {
+
+            }
+        }
+    }
 }

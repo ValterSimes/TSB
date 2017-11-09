@@ -166,10 +166,10 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
     protected void rehash()
     {
-        Entry<K,V> vectorDos[] = new Entry[this.vector.length];//crea auxiliar
+        Entry<K,V> vectorDos[] = new Entry[this.vector.length];             //crea auxiliar
         System.arraycopy(this.vector, 0, vectorDos, 0, this.vector.length);//copia vector en auxiliar
-        this.vector= new Entry[this.vector.length*2+1];//nuevo vector (borra lo que tenia)
-        for (int i = 0; i < vector.length; i++) { //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
+        this.vector= new Entry[this.vector.length*2+1];                          //nuevo vector (borra lo que tenia)
+        for (int i = 0; i < vector.length; i++) {                                        //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
             if(!(vectorDos[i]== null || vectorDos[i].getValue()==null))
             {
              this.put(vectorDos[i].getKey(),vectorDos[i].getValue());

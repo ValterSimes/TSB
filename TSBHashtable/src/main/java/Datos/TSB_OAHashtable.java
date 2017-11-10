@@ -46,23 +46,23 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
             /*
      * Clase interna que representa los pares de objetos que se almacenan en la
-     * tabla hash: son instancias de esta clase las que realmente se guardan en 
-     * en cada una de las listas del arreglo table que se usa como soporte de 
-     * la tabla. Lanzará una IllegalArgumentException si alguno de los dos 
+     * tabla hash: son instancias de esta clase las que realmente se guardan en
+     * en cada una de las listas del arreglo table que se usa como soporte de
+     * la tabla. Lanzará una IllegalArgumentException si alguno de los dos
      * parámetros es null.
      */
-    public boolean esTumba(int i)
+    private boolean esTumba(int i)
         {
            return (vector[i].getValue()==null);
         }
-    
-    
+
+
     private class Entry<K, V> implements Map.Entry<K, V>
     {
         private K key;
         private V value;
-        
-        public Entry(K key, V value) 
+
+        public Entry(K key, V value)
         {
             if(key == null || value == null)
             {
@@ -71,55 +71,55 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             this.key = key;
             this.value = value;
         }
-        
-        
+
+
         @Override
-        public K getKey() 
+        public K getKey()
         {
             return key;
         }
 
         @Override
-        public V getValue() 
+        public V getValue()
         {
             return value;
         }
 
         @Override
-        public V setValue(V value) 
+        public V setValue(V value)
         {
-            if(value == null) 
+            if(value == null)
             {
                 throw new IllegalArgumentException("setValue(): parámetro null...");
             }
-                
+
             V old = this.value;
             this.value = value;
             return old;
         }
-       
+
         @Override
-        public int hashCode() 
+        public int hashCode()
         {
             int hash = 7;
             hash = 61 * hash + Objects.hashCode(this.key);
-            hash = 61 * hash + Objects.hashCode(this.value);            
+            hash = 61 * hash + Objects.hashCode(this.value);
             return hash;
         }
 
         @Override
-        public boolean equals(Object obj) 
+        public boolean equals(Object obj)
         {
             if (this == obj) { return true; }
             if (obj == null) { return false; }
             if (this.getClass() != obj.getClass()) { return false; }
-            
+
             final Entry other = (Entry) obj;
             if (!Objects.equals(this.key, other.key)) { return false; }
-            if (!Objects.equals(this.value, other.value)) { return false; }            
+            if (!Objects.equals(this.value, other.value)) { return false; }
             return true;
-        }       
-        
+        }
+
         @Override
         public String toString()
         {
@@ -175,14 +175,14 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             if(!(vectorDos[i]== null || vectorDos[i].getValue()==null))
             {
              this.put(vectorDos[i].getKey(),vectorDos[i].getValue());
-            }            
-        }        
+            }
+        }
     }
 
     private int buscar(Object key)
     {
-      if(key == null) throw new NullPointerException("get(): parámetro null");       
-       int i = this.h(key.hashCode());    
+      if(key == null) throw new NullPointerException("get(): parámetro null");
+       int i = this.h(key.hashCode());
        while(vector[i]!=null)
        {
            if(vector[i].key.equals(key))
@@ -193,10 +193,10 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
            {
                if(i!=(vector.length-1))
                i++;
-               else 
+               else
                i=0;
            }
-       }       
+       }
        return -1;//significa que no lo encontro.Y manda -1 como valor.
     }
 
@@ -207,7 +207,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     {
         if(this.containsValue(value))
             return value;//devuelve ese valor y no hace nada mas, ya que ese valor ya existe en el vector.
-        
+
         if(key == null || value == null) throw new NullPointerException("put(): parámetro null");
 
         int indexMadre = TSB_OAHashtable.this.h(key);
@@ -291,14 +291,14 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
 
     @Override
-    public V remove(Object key) 
+    public V remove(Object key)
     {
         int indice = buscar(key);
         if (-1==indice)
         return null;
-         
+
         V v=vector[indice].getValue();
-       
+
         vector[indice].setValue(null);
         return v;
     }
@@ -315,7 +315,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     public void clear() {
         int cant= vector.length;
         this.vector = new Entry[cant];
-        
+
 
     }
 
@@ -378,7 +378,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         private class ValueCollectionIterator implements Iterator<V>
         {
 
-                
+
             public ValueCollectionIterator()
             {
             }

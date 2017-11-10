@@ -182,6 +182,35 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
 
     /**
+     * Retorna un hash code para la tabla completa.
+     * @return un hash code para la tabla.
+     */
+    @Override
+    public int hashCode()
+    {
+        if(this.isEmpty()) {return 0;}
+
+        int hc = 0;
+        for(Map.Entry<K, V> entry : this.entrySet())
+        {
+            hc += (entry).hashCode();
+        }
+
+        return hc;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+
+    /**
      * Busca por una key
      * @param key
      * @return el índice del arreglo en donde está el Entry

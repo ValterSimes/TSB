@@ -203,6 +203,9 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     @Override
     public V put(K key, V value)
     {
+        if(this.containsValue(value)==true)
+            return value;//devuelve ese valor y no hace nada mas, ya que ese valor ya existe en el vector.
+        
         if(key == null || value == null) throw new NullPointerException("put(): parámetro null");
 
         int i = this.h(key);
@@ -340,7 +343,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         @Override
         public int size()
         {
-            return TSB_OAHashtable.this.count;
+            return TSB_OAHashtable.this.size();
         }
 
         @Override
@@ -358,6 +361,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         private class ValueCollectionIterator implements Iterator<V>
         {
 
+                
             public ValueCollectionIterator()
             {
             }

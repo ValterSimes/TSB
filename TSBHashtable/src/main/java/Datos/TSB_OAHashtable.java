@@ -166,9 +166,11 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
     protected void rehash()
     {
-        Entry<K,V> vectorDos[] = new Entry[this.vector.length];             //crea auxiliar
-        System.arraycopy(this.vector, 0, vectorDos, 0, this.vector.length);//copia vector en auxiliar
-        this.vector= new Entry[this.vector.length*2+1];                          //nuevo vector (borra lo que tenia)
+        int tamanoViejo = this.vector.length;
+        Entry<K,V> vectorDos[] = new Entry[tamanoViejo];             //crea auxiliar
+        System.arraycopy(this.vector, 0, vectorDos, 0, tamanoViejo);//copia vector en auxiliar
+        int nuevoTamano = this.siguientePrimo(tamanoViejo * 2 + 1);
+        this.vector = new Entry[nuevoTamano];                          //nuevo vector (borra lo que tenia)
         for (int i = 0; i < vector.length; i++) {                                        //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
             if(!(vectorDos[i]== null || vectorDos[i].getValue()==null))
             {
@@ -225,6 +227,23 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             rehash();
         }
         return value;
+    }
+
+    private int siguientePrimo(int  n)
+    {
+        if ( n % 2  == 0)
+            n++;
+        for ( ; !esPrimo(n); n+=2 ) ;
+        return n;
+    }
+
+    private boolean esPrimo(int n)
+    {
+        for (int i = 3; i <= Math.sqrt(n); i++) {
+            if (n%i == 0) {return false;}
+
+        }
+        return true;
     }
 
 

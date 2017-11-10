@@ -181,25 +181,23 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         }
     }
 
-    private int buscar(Object key)
-    {
-      if(key == null) throw new NullPointerException("get(): parámetro null");
-       int i = this.h(key.hashCode());
-       while(vector[i]!=null)
-       {
-           if(vector[i].key.equals(key))
-           {
-                return i;
-           }
-           else
-           {
-               if(i!=(vector.length-1))
-               i++;
-               else
-               i=0;
-           }
-       }
-       return -1;//significa que no lo encontro.Y manda -1 como valor.
+    /**
+     * Busca por una key
+     * @param key
+     * @return el índice del arreglo en donde está el Entry
+     */
+    private int buscar(Object key) {
+        if (key == null) throw new NullPointerException("get(): parámetro null");
+        int indexMadre = this.h(key.hashCode());
+
+
+        for (int j = 0; ; j++) {
+            int index = this.h(indexMadre + (j * j));
+
+            if (vector[index] == null) return -1; // si hay una abierta, entonces no lo encontró...
+            if (vector[index].key.equals(key)) return index;
+            // TODO: que pasa si son todos tumbas? da vueltas infinitas? fijarse si hay q contemplarlo o no.
+        }
     }
 
 
@@ -288,15 +286,17 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
 
 
+
     @Override
-    public V remove(Object key)
-    {
+    public V remove(Object key) {
         int indice = buscar(key);
-        if (-1==indice)
-        return null;
+        if (-1 == indice)
+            return null;
 
-        V v=vector[indice].getValue();
+        // Lo encontro y retorna el value
+        V v = vector[indice].getValue();
 
+        // Lo hace tumba
         vector[indice].setValue(null);
         return v;
     }

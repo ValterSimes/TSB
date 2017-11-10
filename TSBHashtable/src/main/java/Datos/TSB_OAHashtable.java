@@ -205,25 +205,23 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     @Override
     public V put(K key, V value)
     {
-        if(this.containsValue(value)==true)
+        if(this.containsValue(value))
             return value;//devuelve ese valor y no hace nada mas, ya que ese valor ya existe en el vector.
         
         if(key == null || value == null) throw new NullPointerException("put(): parámetro null");
 
-        int i = this.h(key);
+        int indexMadre = TSB_OAHashtable.this.h(key);
 
-        while (!(esTumba(i) || vector[i] == null))
+        for (int j = 0;; j++)
         {
-            if ((i + 1) == vector.length)
+            int index = h(indexMadre + (j * j));
+
+            if(vector[index] == null || esTumba(index))
             {
-                i = 0;
-            }
-            else
-            {
-                i++;
+                vector[index] = new Entry<>(key, value);
+                break;
             }
         }
-        vector[i] = new Entry<>(key, value);
 
         if (count >= vector.length*loadFactor)
         {

@@ -26,17 +26,17 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     public TSB_OAHashtable()
     {
-        this(5, 0.8f);
+        this(5, 0.5f);
     }
 
     public TSB_OAHashtable(int initial_capacity)
     {
-        this(initial_capacity, 0.8f);
+        this(initial_capacity, 0.5f);
     }
 
     public TSB_OAHashtable(int initial_capacity, float loadFactor)
     {
-        if(loadFactor <= 0) { loadFactor = 0.8f; }
+        if(loadFactor <= 0) { loadFactor = 0.5f; }
         if(initial_capacity <= 0) { initial_capacity = 11; }
 
         this.vector = new Entry[initial_capacity];
@@ -59,13 +59,19 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         return(buscar(key) != -1);
     }
 
+    public boolean contains(Object value) {
+        return containsValue(value);
+    }
+
     @Override
     public boolean containsValue(Object value) {
+        if (value == null) return false;
         for (int i = 0; i < vector.length; i++)
         {
-            if (vector[i].getValue().equals(value))
-            {
-                return true;
+            if (vector[i] != null) {
+                if (vector[i].getValue().equals(value)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -74,7 +80,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     @Override
     public V get(Object key)
     {
-        int i =buscar(key);
+        int i = buscar(key);
         if (i != -1)
         {
             return vector[i].getValue();
@@ -187,7 +193,8 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             int index = this.h(indexMadre + (j * j));
 
             if (vector[index] == null) return -1; // si hay una abierta, entonces no lo encontró...
-            if (vector[index].key.equals(key)) return index;
+            if (vector[index].key.equals(key) && !vector[index].esTumba()) return index;
+
             // TODO: que pasa si son todos tumbas? da vueltas infinitas? fijarse si hay q contemplarlo o no.
         }
     }
@@ -197,12 +204,11 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     @Override
     public V put(K key, V value)
     {
+        if(key == null || value == null) throw new NullPointerException("put(): parámetro null");
+
         if (count + 1 >= vector.length*loadFactor) rehash();
 
-        if(this.containsValue(value))
-            return value;//devuelve ese valor y no hace nada mas, ya que ese valor ya existe en el vector.
-
-        if(key == null || value == null) throw new NullPointerException("put(): parámetro null");
+        int indexPrimerTumba = -1;
 
         int indexMadre = TSB_OAHashtable.this.h(key);
 
@@ -210,12 +216,54 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         {
             int index = h(indexMadre + (j * j));
 
-            if(vector[index] == null || vector[index].esTumba())
-            {
-                vector[index] = new Entry<>(key, value);
-                return value;
+            // La casilla no está abierta
+            if (vector[index] != null) {
+
+                // La casilla está cerrada...
+                if (!vector[index].esTumba()) {
+
+                    // Los key son iguales
+                    if (vector[index].key.equals(key)) {
+                        // Devuelvo el viejo, y asigno el valor nuevo en esa casilla
+                        V temp = vector[index].getValue();
+                        vector[index].setValue(value);
+                        return temp;
+                    }
+                }
+                else {
+                    // Es tumba
+                    if (indexPrimerTumba == -1) indexPrimerTumba = index;
+                }
+
+
+            }
+            else {
+                // Está abierta...
+
+                // TODO: grego
+/*
+                // Si se encontró una primera tumba, la guardo en ese lugar
+                if (indexPrimerTumba != -1) {
+                    vector[indexPrimerTumba] = new Entry<>(key, value);
+                    count++;
+                    return null;
+                }
+                else {
+                    // Si no había tumba anterior, lo guarda en la pos del abierto (ésta)
+                    vector[index] = new Entry<>(key, value);
+                    count++;
+                    return null;
+                }*/
+
+                // Lo agrega en la primera tumba o en la abierta encontrada, según corresponda
+                vector[indexPrimerTumba != -1 ? indexPrimerTumba : index] = new Entry<>(key, value);
+                count++;
+                return null;
+
             }
         }
+
+
     }
 
     private int siguientePrimo(int  n)
@@ -276,23 +324,23 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
 
 
-
-
-
     @Override
     public V remove(Object key) {
         int indice = buscar(key);
-        if (-1 == indice)
-            return null;
+        if (-1 == indice) return null;
 
         // Lo encontro y retorna el value
         V v = vector[indice].getValue();
 
         // Lo hace tumba
         vector[indice].setValue(null);
+        count--;
         return v;
     }
 
+    /**
+     * Pasa un mapa por parámetro y agrega todos sus valores al vector
+     */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         for(Map.Entry<? extends K, ? extends V> e : m.entrySet())
@@ -305,8 +353,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     public void clear() {
         int cant= vector.length;
         this.vector = new Entry[cant];
-
-
+        this.count = 0;
     }
 
     @Override
@@ -314,7 +361,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
         if(keySet == null)
         {
-            // keySet = Collections.synchronizedSet(new KeySet());
             keySet = new KeySet();
         }
         return keySet;
@@ -707,7 +753,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             return new EntrySetIterator();
         }
 
-
         @Override
         public int size() {
             return TSB_OAHashtable.this.count;
@@ -716,6 +761,30 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         @Override
         public void clear() {
             TSB_OAHashtable.this.clear();
+        }
+
+        /**
+         * Verifica si contiene una Entry pasada por parámetro
+         */
+        @Override
+        public boolean contains(Object o) {
+            if(o == null) { return false; }
+            if(!(o instanceof Entry)) { return false; }
+
+            Entry<K, V> entry = (Entry<K, V>) o;
+            K key = entry.getKey();
+            return TSB_OAHashtable.this.containsKey(key);
+        }
+
+
+        @Override
+        public boolean remove(Object o) {
+            if(o == null) { throw new NullPointerException("remove(): parámetro null");}
+            if(!(o instanceof Entry)) { return false; }
+
+            Entry<K, V> entry = (Entry<K, V>) o;
+            K key = entry.getKey();
+            return TSB_OAHashtable.this.remove(key) != null;
         }
 
         private class EntrySetIterator implements Iterator<Map.Entry<K, V>> {
@@ -733,7 +802,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
             public EntrySetIterator() {
                 current_entry = -1;
                 next_ok = false;
-
             }
 
             /*

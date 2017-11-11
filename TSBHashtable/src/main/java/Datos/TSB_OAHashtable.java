@@ -26,7 +26,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     public TSB_OAHashtable()
     {
-        this(5, 0.5f);
+        this(11, 0.5f);
     }
 
     public TSB_OAHashtable(int initial_capacity)
@@ -90,15 +90,15 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     }
     protected void rehash()
     {
-        int tamanoViejo = this.vector.length;
-        Entry<K,V> vectorDos[] = new Entry[tamanoViejo];             //crea auxiliar
-        System.arraycopy(this.vector, 0, vectorDos, 0, tamanoViejo);//copia vector en auxiliar
-        int nuevoTamano = this.siguientePrimo(tamanoViejo * 2 + 1);
-        this.vector = new Entry[nuevoTamano];                          //nuevo vector (borra lo que tenia)
-        for (int i = 0; i < vector.length; i++) {                                        //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
-            if(!(vectorDos[i]== null || vectorDos[i].getValue()==null))
+        Entry<K,V> temp[] = this.vector;
+        int nuevoTamano = this.siguientePrimo(temp.length * 2 + 1);
+        this.vector = new Entry[nuevoTamano]; //nuevo vector (borra lo que tenia)
+
+        this.count = 0;
+        for (int i = 0; i < temp.length; i++) {   //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
+            if(temp[i] != null && !temp[i].esTumba())
             {
-             this.put(vectorDos[i].getKey(),vectorDos[i].getValue());
+             this.put(temp[i].getKey(),temp[i].getValue());
             }
         }
     }

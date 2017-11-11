@@ -120,7 +120,10 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         return hc;
     }
 
-    // TODO: hacer
+    /**
+     * Copia superficial del vector.
+     * Los elementos del arreglo no son objetos nuevos, usan las mismas referencias que el original.
+     */
     @Override
     protected Object clone() throws CloneNotSupportedException {
         TSB_OAHashtable<K, V> t = (TSB_OAHashtable<K, V>)super.clone();
@@ -333,7 +336,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         V v = vector[indice].getValue();
 
         // Lo hace tumba
-        vector[indice].setValue(null);
+        vector[indice].hacerTumba();
         count--;
         return v;
     }
@@ -358,7 +361,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
     @Override
     public Set<K> keySet() {
-
         if(keySet == null)
         {
             keySet = new KeySet();
@@ -378,9 +380,9 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     @Override
     public Set<Map.Entry<K, V>> entrySet()
     {
-        if(entrySet == null)
+        if(this.entrySet == null)
         {
-            entrySet = new EntrySet();
+            this.entrySet = new EntrySet();
         }
         return entrySet;
     }
@@ -424,6 +426,13 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         public V getValue()
         {
             return value;
+        }
+
+        /**
+         * Convierte una Entry en tumba
+         */
+        private void hacerTumba() {
+            value = null;
         }
 
         @Override

@@ -88,14 +88,15 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
         else return null;
 
     }
-    protected void rehash()
+    private void rehash()
     {
         Entry<K,V> temp[] = this.vector;
         int nuevoTamano = this.siguientePrimo(temp.length * 2 + 1);
         this.vector = new Entry[nuevoTamano]; //nuevo vector (borra lo que tenia)
 
         this.count = 0;
-        for (int i = 0; i < temp.length; i++) {   //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
+        for (int i = 0; i < temp.length; i++) //pone de nuevo en vector con nuevo tamaño lo del auxiliar sin null o tumba
+        {
             if(temp[i] != null && !temp[i].esTumba())
             {
              this.put(temp[i].getKey(),temp[i].getValue());
@@ -561,7 +562,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     tempEntry++;
 
-                } while (tempEntry < t.length && (t[tempEntry].esTumba() || t[tempEntry] == null));
+                } while (tempEntry < t.length && (t[tempEntry] == null || t[tempEntry].esTumba()));
 
                 return (tempEntry < t.length);
             }
@@ -582,7 +583,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     current_entry++;
 
-                } while (current_entry < t.length && (t[current_entry].esTumba() || t[current_entry] == null));
+                } while (current_entry < t.length && (t[current_entry] == null || t[current_entry].esTumba()));
 
                 // avisar que next() fue invocado con éxito...
                 next_ok = true;
@@ -614,7 +615,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     current_entry--;
 
-                } while (current_entry >= 0 && (t[current_entry].esTumba() || t[current_entry] == null));
+                } while (current_entry >= 0 && (t[current_entry] == null || t[current_entry].esTumba()));
 
                 // avisar que el remove() válido para next() ya se activó...
                 next_ok = false;
@@ -689,7 +690,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     tempEntry++;
 
-                } while (tempEntry < t.length && (t[tempEntry].esTumba() || t[tempEntry] == null));
+                } while (tempEntry < t.length && (t[tempEntry] == null || t[tempEntry].esTumba()));
 
                 return (tempEntry < t.length);
             }
@@ -710,7 +711,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     current_entry++;
 
-                } while (current_entry < t.length && (t[current_entry].esTumba() || t[current_entry] == null));
+                } while (current_entry < t.length && (t[current_entry] == null || t[current_entry].esTumba()));
 
                 // avisar que next() fue invocado con éxito...
                 next_ok = true;
@@ -742,7 +743,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     current_entry--;
 
-                } while (current_entry >= 0 && (t[current_entry].esTumba() || t[current_entry] == null));
+                } while (current_entry >= 0 && (t[current_entry] == null || t[current_entry].esTumba() ));
 
                 // avisar que el remove() válido para next() ya se activó...
                 next_ok = false;
@@ -834,7 +835,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     tempEntry++;
 
-                } while (tempEntry < t.length && (t[tempEntry].esTumba() || t[tempEntry] == null));
+                } while (tempEntry < t.length && (t[tempEntry] == null || t[tempEntry].esTumba()));
 
                 return (tempEntry < t.length);
             }
@@ -855,7 +856,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     current_entry++;
 
-                } while (current_entry < t.length && (t[current_entry].esTumba() || t[current_entry] == null));
+                } while (current_entry < t.length && (t[current_entry] == null || t[current_entry].esTumba()));
 
                 // avisar que next() fue invocado con éxito...
                 next_ok = true;
@@ -886,7 +887,7 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 do {
                     current_entry--;
 
-                } while (current_entry >= 0 && (t[current_entry].esTumba() || t[current_entry] == null));
+                } while (current_entry >= 0 && (t[current_entry] == null || t[current_entry].esTumba() ));
 
                 // avisar que el remove() válido para next() ya se activó...
                 next_ok = false;

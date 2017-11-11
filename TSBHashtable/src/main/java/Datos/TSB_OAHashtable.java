@@ -620,9 +620,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 // avisar que el remove() válido para next() ya se activó...
                 next_ok = false;
 
-                // la tabla tiene un elementon menos...
-                TSB_OAHashtable.this.count--;
-
             }
         }
     }
@@ -747,9 +744,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
                 // avisar que el remove() válido para next() ya se activó...
                 next_ok = false;
-
-                // la tabla tiene un elementon menos...
-                TSB_OAHashtable.this.count--;
 
             }
         }
@@ -891,9 +885,6 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
 
                 // avisar que el remove() válido para next() ya se activó...
                 next_ok = false;
-
-                // la tabla tiene un elementon menos...
-                TSB_OAHashtable.this.count--;
 
             }
         }

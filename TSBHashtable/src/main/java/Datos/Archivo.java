@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Archivo {
-
+    TSB_OAHashtable<Integer, String> hashtable = new TSB_OAHashtable<>();
     private File file;
     private TSBArrayList<String> lista; 
     public Archivo()

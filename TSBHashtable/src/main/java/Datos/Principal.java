@@ -20,10 +20,11 @@ public class Principal {
         hashtable.put(67,"and");
         hashtable.put(23,"i");
         hashtable.put(75,"say");
-        hashtable.put(80,"go");
-        hashtable.put(16,"go");
-        hashtable.put(28,"go");
+        hashtable.put(12,"go");
+        hashtable.put(12,"go");
+        hashtable.put(12,"go");
 
+        System.out.println("Cantidad de elementos: ");
         System.out.println(hashtable.size());
         Set<Map.Entry<Integer, String>> vistaKeys = hashtable.entrySet();
         Iterator<Map.Entry<Integer, String>> it = vistaKeys.iterator();
